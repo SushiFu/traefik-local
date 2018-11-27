@@ -1,0 +1,22 @@
+version: "3"
+services:
+  traefik:
+    restart: always
+    image: traefik:latest
+    ports:
+      - 80:80
+    networks:
+      - web
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=web
+      - traefik.backend=traefik-api
+      - "traefik.frontend.rule=Host:traefik.localhost"
+      - traefik.port=8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./config/traefik.toml:/traefik.toml
+
+networks:
+  web:
+    external: true

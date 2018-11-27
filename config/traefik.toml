@@ -1,0 +1,21 @@
+debug = false
+
+logLevel = "INFO"
+defaultEntryPoints = ["http"]
+
+[entryPoints]
+  [entryPoints.http]
+  address = ":80"
+  [entryPoints.traefik]
+  address = ":8080"
+
+[api]
+entryPoint = "traefik"
+dashboard = true
+
+[retry]
+
+[docker]
+endpoint = "unix:///var/run/docker.sock"
+watch = true
+exposedbydefault = false
