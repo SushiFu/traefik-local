@@ -76,7 +76,7 @@ networks:
       - traefik.enable=true
       - traefik.docker.network=web
       - traefik.backend=my-frontend # Name of your application
-      - traefik.frontend.rule=Host:traefik.localhost # You can use any domain ending by .localhost
+      - traefik.frontend.rule=Host:my-frontend.localhost # You can use any domain ending by .localhost
       - traefik.port=36363 # Adapt to the exposed port in the container
 
 # Protip: For Web applications use the same origin domain for your frontend and backend to avoid cookies issues
