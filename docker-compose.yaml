@@ -5,17 +5,20 @@ services:
     image: traefik:latest
     ports:
       - 80:80
+      - 443:443
     networks:
       - web
     labels:
       - traefik.enable=true
       - traefik.docker.network=web
-      - traefik.backend=traefik-api
-      - traefik.frontend.rule=Host:traefik.localhost
+      - traefik.backend=traefik-ui
+      - traefik.frontend.rule=Host:traefik.local.test
       - traefik.port=8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik.toml:/traefik.toml:ro
+      - ./local-cert.pem:/local-cert.pem:ro
+      - ./local-key.pem:/local-key.pem:ro
 
 networks:
   web:
