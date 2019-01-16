@@ -65,7 +65,7 @@ mkcert -install
 
 ```sh
 # Clone this repository
-git clone git@git.thepunk.tech:infra/traefik-local.git
+git clone https://github.com/SushiFu/traefik-local.git
 cd traefik-local/
 
 # Create an external network web, all future containers
