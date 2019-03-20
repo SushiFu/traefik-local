@@ -1,5 +1,15 @@
 version: "3"
 services:
+  dnsmasq:
+    restart: always
+    image: jpillora/dnsmasq:latest
+    ports:
+      - 53:53/udp
+    networks:
+      - web
+    volumes:
+      - ./dnsmasq/dnsmasq.conf:/etc/dnsmasq.conf:ro
+
   traefik:
     restart: always
     image: traefik:latest
@@ -8,6 +18,8 @@ services:
       - 443:443
     networks:
       - web
+    depends_on:
+      - dnsmasq
     labels:
       - traefik.enable=true
       - traefik.docker.network=web
@@ -16,9 +28,8 @@ services:
       - traefik.port=8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./traefik.toml:/traefik.toml:ro
-      - ./local-cert.pem:/local-cert.pem:ro
-      - ./local-key.pem:/local-key.pem:ro
+      - ./traefik/traefik.toml:/traefik.toml:ro
+      - ./certs:/certs:ro
 
 networks:
   web:

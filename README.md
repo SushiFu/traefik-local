@@ -11,41 +11,13 @@ This guide is for MacOS, but will work on Linux with minor modifications.
 -   [Docker](https://docs.docker.com/docker-for-mac/install/)
 -   [Homebrew](https://brew.sh/)
 
-## 1. Install and configure dnsmasq
+## 1. Setup resolvers
 
 ```sh
-brew up
-brew install dnsmasq
-
-# Setup dnsmasq config
-cp $(brew list dnsmasq | grep /dnsmasq.conf$) /usr/local/etc/dnsmasq.conf
-echo "address=/test/127.0.0.1" >> /usr/local/etc/dnsmasq.conf
-echo "address=/localhost/127.0.0.1" >> /usr/local/etc/dnsmasq.conf
-
-# Setup daemon configuration
-sudo cp $(brew list dnsmasq | grep /homebrew.mxcl.dnsmasq.plist$) /Library/LaunchDaemons/
-sudo launchctl load /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
-
-# Validate our local DNS resolver is working
-dig local.test @127.0.0.1
-# Expected:
-# ;; ANSWER SECTION:
-# local.test.		0	IN	A	127.0.0.1
-
-# If non working reload dnsmasq daemon
-sudo launchctl stop homebrew.mxcl.dnsmasq
-sudo launchctl start homebrew.mxcl.dnsmasq
-
-# Setup MacOS to take into account our local resolver
+# Setup MacOS to take into account our local docker resolver
 sudo mkdir -p /etc/resolver
 echo "nameserver 127.0.0.1" | sudo tee -a /etc/resolver/test > /dev/null
 echo "nameserver 127.0.0.1" | sudo tee -a /etc/resolver/localhost > /dev/null
-
-# Validate our custom resolver is working
-ping -c 1 local.test
-# Expected:
-# PING local.test (127.0.0.1): 56 data bytes
-# The address betwen parenthesis should be 127.0.0.1
 ```
 
 ## 2. Setup a local Root CA
@@ -76,7 +48,7 @@ docker network create web
 # You could add any domain you need ending by .test or .localhost
 # *.local.test will create a wildcard certificate so any subdomain in the form this.local.test will also work.
 # Unfortunately you cannot create *.test wildcard certificate your browser will not allow it.
-mkcert -cert-file local-cert.pem -key-file local-key.pem "local.test" "*.local.test" "home.test" "*.home.test" "home.localhost" "*.home.localhost"
+mkcert -cert-file certs/local-cert.pem -key-file certs/local-key.pem "local.test" "*.local.test" "home.test" "*.home.test" "home.localhost" "*.home.localhost"
 
 # Start Traefik
 docker-compose pull
