@@ -12,7 +12,7 @@ services:
 
   traefik:
     restart: always
-    image: traefik:latest
+    image: traefik:1.7
     ports:
       - 80:80
       - 443:443
