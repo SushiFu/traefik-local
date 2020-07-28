@@ -1,0 +1,31 @@
+entryPoints:
+  http:
+    address: :80
+    http:
+      redirections:
+        entryPoint:
+          to: https
+          scheme: https
+          permanent: true
+  https:
+    address: :443
+
+providers:
+  providersThrottleDuration: 2s
+  docker:
+    endpoint: unix:///var/run/docker.sock
+    watch: true
+    network: docker
+    exposedByDefault: false
+  file:
+    filename: /dynamic.yml
+    watch: false
+
+api:
+  dashboard: true
+  insecure: false
+  debug: false
+
+log:
+  level: INFO
+accessLog: true

@@ -1,1 +1,2 @@
-/certs/*.pem
+/certs/*.key
+/certs/*.crt
